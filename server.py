@@ -11,6 +11,9 @@ import os
 import ctypes
 import flask
 import functools
+import time
+import psutil
+
 
 debug = 1
 if debug:
@@ -35,6 +38,7 @@ def kill_process(process_name):
 
 def start_parsec():
     return os.system('"' + PARSEC_INSTALL_LOCATION + '\parsecd.exe"')
+
 
 app = flask.Flask(__name__)
 
@@ -70,13 +74,21 @@ def app_restart_parsec():
     ext = kill_process('parsecd.exe')
 
     print('We tried to kill parsec with response:\n', ext)
+    error = 'An unknown error has happened. I think you should take a peak at the console for this!'
+
     if str(ext) == '0':
         # task was successful
-        ext = start_parsec() # now we restart!
-        print('PARSEC_START ', ext)
-        return flask.render_template('success.html')
+        time.sleep(1) # wait for the process to shutdown for real
+        test = str(kill_process('parsecd.exe'))
+        if test == '128' or test == '0':
+            # we killed it
+            ext = start_parsec() # now we restart!
+            print('Attempting to start Parsec Daemon with exit code: ', ext)
+            return flask.render_template('success.html')
+        else:
+            error = 'Parsec daemon could not be stopped.'
 
-    error = 'An unknown error has happened. I think you should take a peak at the console for this!'
+    
     if str(ext) == '128':
         # 404, task not found
         error = 'Parsec was not running at this time. Please try going to /start'
