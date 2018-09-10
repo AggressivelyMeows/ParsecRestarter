@@ -1,0 +1,27 @@
+{% extends 'imports.html' %}
+{% block content %}
+<style>
+    .section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<div class="section is-medium is-end">
+    <div style="width:350px;">
+        <h1 class="title has-text-centered is-light">Parsec Restarter</h1>
+        <p class="subtitle is-5 is-light has-text-centered">This program allows you to control the Parsec daemon outside of Task Manager</p>
+        <a href="/restart" class="button k-button k-secondary raised has-gradient is-bold is-fullwidth rounded">
+            <span class="text">Restart Parsec Daemon (Recommended)</span>
+            <span class="front-gradient"></span>
+        </a>
+        <br />
+        <a href="/start" class="button k-button is-info raised has-gradient is-bold is-fullwidth rounded">
+            <span class="text">Start Parsec Daemon</span>
+            <span class="front-gradient"></span>
+        </a>
+    </div>
+</div>
+{% endblock %}
